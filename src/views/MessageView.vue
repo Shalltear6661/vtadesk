@@ -62,7 +62,7 @@
                                 class="text-reset username"
                                 data-bs-toggle="offcanvas"
                                 aria-controls="userProfileCanvasExample"
-                                >CS VTADESK</a
+                                >Customer Support</a
                               >
                             </h5>
                             <span
@@ -103,6 +103,7 @@
                         <div class="user-chat-content">
                           <div class="ctext-wrap">
                             <div class="ctext-wrap-content">
+                              <strong>{{ message.username }} - </strong>
                               <small
                                 class="text-muted"
                                 style="font-size: smaller"
@@ -130,9 +131,7 @@
                         <div class="user-chat-content">
                           <div class="ctext-wrap">
                             <div class="ctext-wrap-content">
-                              <strong v-show="level_name === 'ADMINISTRATOR'"
-                                >{{ message.username }} -
-                              </strong>
+                              <strong>{{ message.username }} - </strong>
                               <small
                                 class="text-muted"
                                 style="font-size: smaller"
@@ -210,7 +209,7 @@
 <script>
 import HeaderVue from "@/components/Header.vue";
 import ProgressTiket from "@/components/ProgressTiket.vue";
-import db from "@/db";
+import { db, storage } from "@/db";
 import axios from "axios";
 export default {
   components: {
@@ -221,7 +220,7 @@ export default {
     return {
       inputMessage: null,
       namaLocalStorage: localStorage.getItem("nama"),
-      keyLocalStorage: window.atob(this.$route.query.email),
+      keyLocalStorage: localStorage.getItem("email"),
       autono: window.atob(this.$route.query.q),
       status: window.atob(this.$route.query.status),
       db_url: null,
@@ -236,6 +235,7 @@ export default {
   },
   methods: {
     SendMessage() {
+      const getTiket = localStorage.getItem("tiket");
       const messagesRef = db.database().ref(this.db_url);
       if (this.inputMessage === "" || this.inputMessage === null) {
         return;
@@ -247,6 +247,21 @@ export default {
       };
       messagesRef.push(message);
       this.inputMessage = "";
+
+      try {
+        axios
+          .post("https://api.vitech.asia/api/setStatus", {
+            tiket: localStorage.getItem("tiket"),
+          })
+          .then((res) => {
+            // console.log(res);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } catch (error) {
+        console.log(error);
+      }
     },
     getTime(date) {
       if (date != null) {
@@ -273,27 +288,28 @@ export default {
   mounted() {
     // console.log(this.autono);
     const new_aut = this.keyLocalStorage + "vta937iV99cqUgf" + this.autono;
-    const key = this.autono + "vta937iV99cqUgf";
     const db_url = window.btoa(new_aut).replace(/=+$/, "");
     this.db_url = db_url;
     console.log(db_url);
-    if (this.status === "open") {
+    if (this.status !== "closed") {
       const messagesRef = db.database().ref(db_url);
       messagesRef.on("value", (snapshot) => {
         const data = snapshot.val();
         let messages = [];
-        Object.keys(data).forEach((key) => {
-          messages.push({
-            id: key,
-            username: data[key].username,
-            content: data[key].content,
-            date: data[key].date,
+        if (data != null) {
+          Object.keys(data).forEach((key) => {
+            messages.push({
+              id: key,
+              username: data[key].username,
+              content: data[key].content,
+              date: data[key].date,
+            });
           });
-        });
-        this.state.messages = messages;
+          this.state.messages = messages;
+        }
       });
     } else {
-      console.log(this.autono);
+      // console.log(this.autono);
       try {
         axios
           .post("https://api.vitech.asia/api/chatdb", {

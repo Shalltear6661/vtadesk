@@ -20,9 +20,9 @@
     <div class="auth-page-content">
       <div class="container">
         <div class="row">
-          <div class="col-lg-12 mt-xl-5">
+          <div class="col-lg-12 py-5">
             <div class="row justify-content-center">
-              <div class="col-xl-10">
+              <div class="col-xl-12">
                 <div class="card">
                   <div class="card-header">
                     <img

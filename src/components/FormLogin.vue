@@ -8,7 +8,7 @@
               <h5 class="text-secondary">Selamat Datang !</h5>
               <p class="text-muted">
                 Masukan
-                <strong>Email dan Password</strong> anda
+                <strong>Email dan Password</strong>
               </p>
             </div>
             <div class="p-2 mt-4">
@@ -39,6 +39,18 @@
                   </button>
                 </div>
               </form>
+
+              <!-- <div class="mt-2 text-center">
+                <p class="mb-0">
+                  Belum punya akun ?
+                  <a
+                    href="/signup"
+                    class="fw-semibold text-primary text-decoration-underline"
+                  >
+                    Daftar Sekarang</a
+                  >
+                </p>
+              </div> -->
             </div>
           </div>
         </div>
@@ -96,7 +108,7 @@ export default {
     };
   },
   created() {
-    console.log(this.email);
+    // console.log(this.email);
 
     if (this.sn != null) {
       try {
@@ -130,7 +142,7 @@ export default {
             password: this.password,
           })
           .then((res) => {
-            console.log(res.data.data);
+            // console.log(res.data);
             Swal.fire({
               icon: "success",
               title: "Berhasil!",
@@ -138,15 +150,18 @@ export default {
               showConfirmButton: false,
               timer: 1500,
             });
-            sessionStorage.setItem("key", res.data.data);
+            sessionStorage.setItem("key", res.data.user);
             localStorage.setItem("nama", res.data.nama);
             localStorage.setItem("id", res.data.autono);
             localStorage.setItem("email", res.data.email);
             localStorage.setItem("level_name", res.data.level_name);
+            localStorage.setItem("entitas", res.data.entitas);
+            localStorage.setItem("autono", res.data.cust_id);
             if (res.data.sn !== null) {
               localStorage.setItem("sn", res.data.sn);
             }
             this.$router.push("/");
+            this.storeFirebaseToken(res.data.cust_id);
           })
           .catch((err) => {
             if (err.response) {
@@ -173,6 +188,29 @@ export default {
           });
       } catch (e) {
         console.log(e);
+      }
+    },
+    storeFirebaseToken(id) {
+      try {
+        axios
+          .post(this.UrlApi + "storeusertoken", {
+            id: id,
+            token: localStorage.getItem("firebaseToken"),
+          })
+          .then(() => {
+            console.log("success");
+          })
+          .catch((err) => {
+            if (err.response) {
+              console.log(err.response);
+            } else if (err.request) {
+              console.log("error request");
+            } else {
+              console.log("error");
+            }
+          });
+      } catch (error) {
+        console.log(error);
       }
     },
   },

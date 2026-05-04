@@ -1,79 +1,83 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
-  <div class="chat-leftsidebar col-xxl-3 mx-3">
+  <div class="chat-leftsidebar col-xxl-6 mx-3">
     <div class="px-4 pt-4 mb-4">
       <div class="d-flex align-items-start">
         <div class="flex-grow-1">
           <div class="col-12">
-            <h5 class="mb-4">Progress Tiket</h5>
-            <button
-              type="button"
-              class="btn btn-primary"
-              @click.prevent="showChat"
-              v-if="!showButton"
-            >
+            <h4>Detail Tiket <a class="btn btn-danger btn-sm" href="/">Kembali</a></h4>
+            <button type="button" class="btn btn-primary" @click.prevent="showChat" v-if="!showButton">
               Lihat Chat
             </button>
           </div>
         </div>
       </div>
-      <hr />
     </div>
     <div class="chat-room-list" data-simplebar>
       <div class="table-responsive table-card m-2">
-        <table class="table table-borderless align-middle mb-0">
+        <table class="table table-bordered align-middle mb-0">
           <tbody>
             <tr>
-              <td class="fw-medium">Kode Tiket</td>
-              <td>
-                <span id="t-no">{{ datatiket.kodetiket }}</span>
-              </td>
+              <td>Kode Tiket</td>
+              <td>{{ datatiket.kodetiket }}</td>
             </tr>
             <tr>
-              <td class="fw-medium">Produk</td>
+              <td>Produk</td>
               <td>{{ datatiket.nm_produk }}</td>
             </tr>
             <tr>
-              <td>Deskripsi</td>
-              <td>{{ datatiket.deskripsi }}</td>
-            </tr>
-            <!-- <tr>
-              <td class="fw-medium">Status:</td>
-            </tr> -->
-            <!-- <tr>
-              <td class="fw-medium">Prioritas</td>
-              <td>
-                <span
-                  class="badge bg-danger"
-                  v-show="datatiket.prioritas == 'tinggi'"
-                  >{{ datatiket.prioritas }}</span
-                >
-                <span
-                  class="badge bg-warning"
-                  v-show="datatiket.prioritas == 'sedang'"
-                  >{{ datatiket.prioritas }}</span
-                >
-                <span
-                  class="badge bg-success"
-                  v-show="datatiket.prioritas == 'rendah'"
-                  >{{ datatiket.prioritas }}</span
-                >
-              </td>
-            </tr> -->
-            <tr>
-              <td class="fw-medium">Tanggal Buat</td>
-              <td id="c-date">{{ datatiket.tgl_dibuat }}</td>
+              <td>Tanggal Buat</td>
+              <td>{{ datatiket.tgl_dibuat }}</td>
             </tr>
             <tr>
-              <td>Tanggal Perbaikan</td>
-              <td>
-                {{ datatiket.tgl_perbaikan ? kodetiket.tgl_perbaikan : "-" }}
+              <td>Status Tiket</td>
+              <td>{{ datatiket.stat_tiket }}</td>
+            </tr>
+            <tr>
+              <td>Keluhan</td>
+              <td>{{ datatiket.deskripsi.replace(/<br\s*[\/]?>/gi, '\n') }}</td>
+            </tr>
+            <tr v-if="datatiket.files != null">
+              <td>Lampiran File</td>
+              <td v-if="ambilExtension(datatiket.files) == 'pdf'">
+                <a :href="'https://api.vitech.asia/storage/customer/' + datatiket.files" target="_blank"><img src="/images/pdf.png" alt=""></a>
+              </td>
+              <td v-else-if="ambilExtension(datatiket.files) == 'doc' || ambilExtension(datatiket.files) == 'docx'">
+                <a :href="'https://api.vitech.asia/storage/customer/' + datatiket.files" target="_blank"><img src="/images/word.png" alt=""></a>
+              </td>
+              <td v-else-if="ambilExtension(datatiket.files) == 'xls' || ambilExtension(datatiket.files) == 'xlsx'">
+                <a :href="'https://api.vitech.asia/storage/customer/' + datatiket.files" target="_blank"><img src="/images/xls.png" alt=""></a>
+              </td>
+              <td v-else-if="ambilExtension(datatiket.files) == 'jpg' || ambilExtension(datatiket.files) == 'jpeg' || ambilExtension(datatiket.files) == 'png' || ambilExtension(datatiket.files) == 'webp'">
+                <img :src="'https://api.vitech.asia/storage/customer/' + datatiket.files" class="img-fluid img-thumbnail" alt="">
+              </td>
+              <td v-else-if="ambilExtension(datatiket.files) == 'mp4' || ambilExtension(datatiket.files) == 'oog' || ambilExtension(datatiket.files) == 'mov' || ambilExtension(datatiket.files) == 'webm'">
+                <video width="320" height="240" controls>
+                  <source :src="'https://api.vitech.asia/storage/customer/' + datatiket.files">
+                </video>
+              </td>
+              <td v-else>
+                <a :href="'https://api.vitech.asia/storage/customer/' + datatiket.files" target="_blank"><img src="/images/files.png" alt=""></a>
+              </td>
+            </tr>
+            <tr v-else>
+              <td>Lampiran File</td>
+              <td>-</td>
+            </tr>
+          </tbody>
+        </table>
+        <h6 class="mt-4">Hasil Perbaikan</h6>
+        <hr>
+        <table class="table table-bordered align-middle mb-0">
+          <tbody>
+            <tr>
+              <td>Status Perbaikan</td>
+              <td class="text-center">{{ (datatiket.servis == 2) ? (datatiket.servis == 1) ? 'Proses' : 'Selesai' : '-' }}
               </td>
             </tr>
             <tr>
-              <td>Solusi</td>
-              <td>
-                {{ datatiket.solusi ? datatiket.solusi : "-" }}
-              </td>
+              <td>Keterangan</td>
+              <td class="text-center">{{ datatiket.solusi ?? '-' }}</td>
             </tr>
           </tbody>
         </table>
@@ -95,7 +99,9 @@ export default {
         nm_produk: "",
         penerima: "",
         solusi: "",
-        tgl_perbaikan: "",
+        servis: "",
+        stat_tiket: "",
+        files: "",
       },
       currentWidth: null,
       showButton: false,
@@ -107,6 +113,15 @@ export default {
     },
     myEventHandler() {
       this.currentWidth = window.innerWidth;
+    },
+    back() {
+      this.$router.go(-1);
+    },
+    ambilExtension(string) {
+      if (string !== null) {
+        const resArr = string.split(".");
+        return resArr[1];
+      }
     },
   },
   mounted() {
@@ -120,6 +135,8 @@ export default {
           id: this.autono,
         })
         .then((res) => {
+          // console.log(res.data.data);
+          // console.log(res.data.data.proses_servis);
           this.datatiket.kodetiket = res.data.data.kodetiket;
           this.datatiket.deskripsi = res.data.data.deskripsi;
           this.datatiket.penerima = res.data.data.nm_kontak;
@@ -127,7 +144,21 @@ export default {
           this.datatiket.tgl_dibuat = res.data.data.tgl_terima;
           this.datatiket.nm_produk = res.data.data.nama_produk;
           this.datatiket.solusi = res.data.data.solusi_teknis;
-          this.datatiket.tgl_perbaikan = res.data.data.tgl_perbaikan_awal;
+          this.datatiket.servis = res.data.data.proses_servis;
+          this.datatiket.stat_tiket = res.data.data.stat_tiket;
+          this.datatiket.files = res.data.data.nama_file;
+          localStorage.setItem("tiket", res.data.data.kodetiket);
+
+          if (localStorage.getItem("notif-key")) {
+            let arrayData = JSON.parse(localStorage.getItem("notif-key"));
+
+            let index = arrayData.indexOf(res.data.data.kodetiket);
+            if (index !== -1) {
+              arrayData.splice(index, 1);
+
+              localStorage.setItem("notif-key", JSON.stringify(arrayData));
+            }
+          }
         })
         .catch((error) => {
           console.log(error);

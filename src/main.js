@@ -10,7 +10,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 router.beforeEach((to, from, next) => {
   const token = sessionStorage.getItem("key");
   console.log(!token, to.name);
-  if (!token && to.name != "tiket") {
+  if (!token && to.name != "tiket" && to.name != "signup") {
     next({ name: "tiket" });
   } else {
     next();

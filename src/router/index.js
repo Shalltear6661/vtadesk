@@ -4,6 +4,9 @@ import TiketDetail from "../views/TiketDetailView.vue";
 import MessageView from "../views/MessageView.vue";
 import LogPerangkat from "../views/LogPerangkat.vue";
 import LogPerangkatAll from "../views/LogPerangkatAll.vue";
+import SignupView from "../views/SignupView.vue";
+import TestUpload from "../views/TestUploadFirebase.vue";
+import ChangePassword from "../views/ChangePassword.vue";
 
 const routes = [
   {
@@ -36,6 +39,21 @@ const routes = [
     path: "/log-perangkat-all",
     name: "log perangkat all",
     component: LogPerangkatAll,
+  },
+  {
+    path: "/signup",
+    name: "signup",
+    component: SignupView,
+  },
+  {
+    path: "/test-upload",
+    name: "test upload",
+    component: TestUpload,
+  },
+  {
+    path: "/change-password",
+    name: "change password",
+    component: ChangePassword,
   },
 ];
 

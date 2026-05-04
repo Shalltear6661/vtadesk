@@ -570,6 +570,10 @@
                 ><i class="mdi mdi-home text-muted fs-16 align-middle me-1"></i>
                 <span class="align-middle">Dashboard</span></a
               >
+              <a class="dropdown-item" href="/change-password"
+                ><i class="mdi mdi-cog text-muted fs-16 align-middle me-1"></i>
+                <span class="align-middle">Change Password</span></a
+              >
               <a v-show="sn != null" class="dropdown-item" href="/log-perangkat"
                 ><i
                   class="mdi mdi-devices text-muted fs-16 align-middle me-1"

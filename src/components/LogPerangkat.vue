@@ -48,6 +48,7 @@ export default {
     return {
       count: null,
       level_name: localStorage.getItem("level_name"),
+      entitas: localStorage.getItem("entitas"),
     };
   },
   created() {

@@ -5,20 +5,11 @@
         class="page-title-box d-sm-flex align-items-center justify-content-between"
       >
         <h4 class="mb-sm-0">Rekap Tiket</h4>
-
-        <!-- <div class="page-title-right">
-          <ol class="breadcrumb m-0">
-            <li class="breadcrumb-item">
-              <a href="javascript: void(0);">Tickets</a>
-            </li>
-            <li class="breadcrumb-item active">Tickets List</li>
-          </ol>
-        </div> -->
       </div>
     </div>
   </div>
   <div class="row">
-    <div class="col-xxl-4 col-sm-6">
+    <div class="col-xxl-4 col-sm-4" @click="showAll('all')">
       <div class="card card-animate">
         <div class="card-body">
           <div class="d-flex justify-content-between">
@@ -46,7 +37,7 @@
       <!-- end card-->
     </div>
     <!--end col-->
-    <div class="col-xxl-4 col-sm-6">
+    <div class="col-xxl-4 col-sm-4" @click="showAll('progress')">
       <div class="card card-animate">
         <div class="card-body">
           <div class="d-flex justify-content-between">
@@ -73,7 +64,7 @@
       </div>
     </div>
     <!--end col-->
-    <div class="col-xxl-4 col-sm-6">
+    <div class="col-xxl-4 col-sm-4" @click="showAll('closed')">
       <div class="card card-animate">
         <div class="card-body">
           <div class="d-flex justify-content-between">
@@ -119,6 +110,7 @@ export default {
         .post("https://api.vitech.asia/api/tiketcount", {
           id: localStorage.getItem("id"),
           level_name: this.level_name,
+          entitas: localStorage.getItem("entitas"),
         })
         .then((res) => {
           this.total_tiket = res.data.data.total;
@@ -128,6 +120,11 @@ export default {
     } catch (error) {
       console.log(error);
     }
+  },
+  methods: {
+    showAll(val) {
+      console.log(val);
+    },
   },
 };
 </script>

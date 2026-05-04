@@ -20,53 +20,53 @@
   <div class="col">
     <div class="col-4 mb-2">
       <select class="form-select" v-model="selectedSN" @change="onChangeSN">
-        <option disabled>Pilih Nomor SN</option>
+        <option value="00" disabled>Pilih Nomor SN</option>
         <option v-for="list in listSn" :key="list" :value="list.bios_sn">
           {{ list.bios_sn }} - Storage : {{ list.storage_percentage }} %
         </option>
       </select>
     </div>
-    <div class="col-12 table-responsive table-bordered my-5">
-      <table class="table">
+    <div class="col-12 table-responsive my-5">
+      <table class="table table-bordered table-striped">
         <tbody v-for="v in listLog" :key="v">
           <tr>
-            <td>Nama Komputer</td>
+            <td><strong>Nama Komputer</strong></td>
             <td>{{ v.hostname }}</td>
           </tr>
           <tr>
-            <td>Sistem Operasi</td>
+            <td><strong>Sistem Operasi</strong></td>
             <td>{{ v.platform }} {{ v.system_type }} {{ v.rilis }}</td>
           </tr>
           <tr>
-            <td>Sistem Model</td>
+            <td><strong>Sistem Model</strong></td>
             <td>{{ v.model }}</td>
           </tr>
           <tr>
-            <td>Prosesor</td>
+            <td><strong>Prosesor</strong></td>
             <td>{{ v.processor }}</td>
           </tr>
           <tr>
-            <td>Nomor Serial Bios</td>
+            <td><strong>Nomor Serial Bios</strong></td>
             <td>{{ v.bios_sn }}</td>
           </tr>
           <tr>
-            <td>Nomor Serial OS</td>
+            <td><strong>Nomor Serial OS</strong></td>
             <td>{{ v.os_sn }}</td>
           </tr>
           <tr>
-            <td>RAM</td>
+            <td><strong>RAM</strong></td>
             <td>{{ this.formatBytes(v.ram) }}</td>
           </tr>
           <tr>
-            <td>Penyimpanan</td>
+            <td><strong>Penyimpanan</strong></td>
             <td>{{ this.formatBytes(v.storage) }}</td>
           </tr>
           <tr>
-            <td>Model Penyimpanan</td>
+            <td><strong>Model Penyimpanan</strong></td>
             <td>{{ v.storage_model }}</td>
           </tr>
           <tr>
-            <td>RAM Digunakan</td>
+            <td><strong>RAM Digunakan</strong></td>
             <td v-if="v.ram_percentage > 80">
               <span class="badge bg-danger">{{ v.ram_percentage }} %</span>
             </td>
@@ -78,7 +78,7 @@
             </td>
           </tr>
           <tr>
-            <td>CPU Digunakan</td>
+            <td><strong>CPU Digunakan</strong></td>
             <td v-if="v.cpu_percentage > 80">
               <span class="badge bg-danger">{{ v.cpu_percentage }} %</span>
             </td>
@@ -90,7 +90,7 @@
             </td>
           </tr>
           <tr>
-            <td>Penyimpanan Digunakan</td>
+            <td><strong>Penyimpanan Digunakan</strong></td>
             <td v-if="v.storage_percentage > 80">
               <span class="badge bg-danger">{{ v.storage_percentage }} %</span>
             </td>
@@ -198,11 +198,11 @@ export default {
   },
   methods: {
     onChangeSN() {
-      console.log(this.selectedSN);
+      // console.log(this.selectedSN);
       this.getLog();
     },
     getLog() {
-      console.log(this.selectedSN);
+      // console.log(this.selectedSN);
       this.listLog = [];
       try {
         axios
@@ -235,10 +235,10 @@ export default {
           .get(this.UrlApi + "listsn")
           .then((res) => {
             if (res.data.success && res.data.success !== null) {
-              console.log(res.data.data);
+              // console.log(res.data.data);
               this.listSn = res.data.data;
-              this.selectedSN = res.data.data[0].bios_sn;
-              this.getLog();
+              this.selectedSN = "00";
+              // this.getLog();
             } else {
               console.log("gagal fetch data");
             }

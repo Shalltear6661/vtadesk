@@ -2,7 +2,7 @@
   <HeaderVue />
   <div class="page-content">
     <div class="container-fluid">
-      <CountTiket />
+      <!-- <CountTiket /> -->
       <LogPerangkat />
       <DataTiketDetail />
     </div>
@@ -20,7 +20,7 @@ export default {
   components: {
     HeaderVue,
     FooterVue,
-    CountTiket,
+    // CountTiket,
     DataTiketDetail,
     LogPerangkat,
   },

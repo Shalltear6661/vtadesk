@@ -7323,7 +7323,6 @@ button {
     border-top-width: 1px
 }
 
-.table-nowrap td,
 .table-nowrap th {
     white-space: nowrap
 }
@@ -15378,8 +15377,8 @@ span.flatpickr-weekday {
 
 @media (min-width:992px) {
     .chat-leftsidebar {
-        min-width: 300px;
-        max-width: 300px;
+        min-width: 450px;
+        max-width: 450px;
         height: calc(100vh - 70px - 60px - 8px)
     }
 }
